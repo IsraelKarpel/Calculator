@@ -1,6 +1,4 @@
-const { operatorsMap } = require('./maps/operations.js');
-const { colorsMap } = require('./maps/colors.js');
-const Result = require('./result')
+const {buildResult} = require('./services.js');
 
 const express = require('express');
 const app = express();
@@ -14,19 +12,9 @@ app.get('/', (req, res) => {
 
 app.post('/calculate', (req, res) => {
     const { firstNum, secondNum, operator } = getParameters(req);
-    const mathAction = operatorsMap[operator];
-    let calculateResult = mathAction.calculate(firstNum, secondNum)
-    let result = new Result(
-        calculateResult,
-        colorsMap[(getReminder(calculateResult))]
-    )
-    let {number, color} = result.getParameters()
-    res.send({ 'number': number, 'color': color })
+    let result = buildResult(firstNum, secondNum, operator);
+    res.send({ 'answer' : result.getParameters() })
 })
-
-const getReminder = (number) => {
-    return number % 2;
-}
 
 const getParameters = (req) => {
     let firstNum = parseFloat(req.body.firstNum);
