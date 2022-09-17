@@ -1,25 +1,15 @@
-const { colorsMap } = require('./maps/colors.js');
-const Result = require('./result')
-const { operatorsMap } = require('./maps/operations.js');
 
-const buildResult = (firstNum, secondNum, operator) => {
-    let calculatedResult = calculateResult(firstNum, secondNum, operator);
-    let color = colorsMap[(getReminder(calculatedResult))]
-    let result = new Result(
-        calculatedResult,
-        color
-    )
-    return result
+const CalculateManager = require('./calculateManager')
+const ResultBuilderColor = require('./resultBuilders/resultBuilderColor')
+
+const getResult = (firstNum, secondNum, operator) => {
+    //operationOrderManager.order(request):
+    //1) should implement shutting yard algorithm to transform infix to postfix form
+    //2) calculate postfix: push numbers to stack until operator and use the last two umber with it,
+    let calculatedResult = new CalculateManager().calculateResult(firstNum, secondNum, operator);
+    let result = new ResultBuilderColor()
+    result.build(calculatedResult)
+    return result.getParameters()
 }
 
-const calculateResult = (firstNum, secondNum, operator) => {
-    const mathAction = operatorsMap[operator];
-    let calculatedResult = mathAction.calculate(firstNum, secondNum)
-    return calculatedResult
-}
-
-const getReminder = (number) => {
-    return number % 2;
-}
-
-module.exports = { buildResult }
+module.exports = { getResult }

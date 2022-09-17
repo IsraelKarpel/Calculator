@@ -1,4 +1,4 @@
-const {buildResult} = require('./services.js');
+const {getResult} = require('./services.js');
 
 const express = require('express');
 const app = express();
@@ -12,8 +12,8 @@ app.get('/', (req, res) => {
 
 app.post('/calculate', (req, res) => {
     const { firstNum, secondNum, operator } = getParameters(req);
-    let result = buildResult(firstNum, secondNum, operator);
-    res.send({ 'answer' : result.getParameters() })
+    let answer = getResult(firstNum, secondNum, operator);
+    res.send({ 'answer' : answer })
 })
 
 const getParameters = (req) => {
