@@ -11,16 +11,10 @@ app.get('/', (req, res) => {
 })
 
 app.post('/calculate', (req, res) => {
-    const { firstNum, secondNum, operator } = getParameters(req);
-    let answer = getResult(firstNum, secondNum, operator);
+    const wholeInput = req.body.wholeInput
+    let token = 'color'
+    let answer = getResult(wholeInput, token);
     res.send({ 'answer' : answer })
 })
-
-const getParameters = (req) => {
-    let firstNum = parseFloat(req.body.firstNum);
-    let secondNum = parseFloat(req.body.secondNum);
-    let operator = req.body.operator;
-    return { firstNum, secondNum, operator }
-}
 
 app.listen(3001)

@@ -1,15 +1,15 @@
+const { buildersMap } = require("./maps/builders.js");
+const { calculateMap } = require("./maps/calculates.js");
+const { ordersMap } = require("./maps/orders.js");
 
-const CalculateManager = require('./calculateManager')
-const ResultBuilderColor = require('./resultBuilders/resultBuilderColor')
+const getResult = (request, type) => {
+  let calculateManager = calculateMap["calculate"];
+  let operationOrderManager = ordersMap["postfix"];
+  let orderedResult = operationOrderManager.changeToPrefixOrder(request); //("3 + 4 * 2 / 1") => 342*1/+
+  let numberResult = calculateManager.calculateComplexResult(orderedResult);
+  let result = buildersMap[type];
+  result.build(numberResult);
+  return result.getParameters();
+};
 
-const getResult = (firstNum, secondNum, operator) => {
-    //operationOrderManager.order(request):
-    //1) should implement shutting yard algorithm to transform infix to postfix form
-    //2) calculate postfix: push numbers to stack until operator and use the last two umber with it,
-    let calculatedResult = new CalculateManager().calculateResult(firstNum, secondNum, operator);
-    let result = new ResultBuilderColor()
-    result.build(calculatedResult)
-    return result.getParameters()
-}
-
-module.exports = { getResult }
+module.exports = { getResult };
